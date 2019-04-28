@@ -4,44 +4,54 @@
 
     <p>{{ $t('message.hello') }}</p>
 
-    <input type="text" v-model="username" placeholder="username">
-    <input type="password" v-model="password" placeholder="password">
-    <button @click="login">Login</button>
+    <section>
+      <event-table :data="events"></event-table>
+    </section>
+
+    <section>
+      <button class="button is-primary is-medium"
+              @click="isComponentModalActive = true">
+        Login
+      </button>
+
+      <b-modal :active.sync="isComponentModalActive" has-modal-card>
+        <login-modal></login-modal>
+      </b-modal>
+    </section>
   </div>
 </template>
 
 <script>
-  /* eslint-disable no-console */
 import {api} from "../main";
+import { mapGetters } from 'vuex'
+import LoginModal from '../components/LoginModal'
+import EventTable from './EventTable'
 
 export default {
+  components: {
+    LoginModal,
+    EventTable
+  },
   name: 'Index',
   props: {
     msg: String
   },
   data: () => ({
-    username: '',
-    password: '',
-    user: ''
+    isComponentModalActive: false,
+    events: []
   }),
+  computed: {
+    ...mapGetters({
+      isLoggedIn: 'isLoggedIn',
+    }),
+  },
   methods: {
-    login() {
-      this.$http.post(api + '/login', {
-        username: this.username,
-        password: this.password
-      }).then(response => {
-        localStorage.setItem('authorization', response.headers.authorization)
-      })
-    }
+    // methods
   },
   created() {
-    console.log(localStorage.getItem('authorization'))
-    this.$http.get(api + '/events', {
-      headers: {
-        Authorization: localStorage.getItem('authorization')
-      }
-    }).then( response => {
-      console.log(response.data)
+    console.log(this.isLoggedIn)
+    this.$http.get(api + '/events').then( response => {
+      this.events = response.data.content
     })
   }
 }
