@@ -2,6 +2,8 @@
   <div class="hello">
     <h1>{{ msg }}</h1>
 
+    <p>{{ $t('message.hello') }}</p>
+
     <input type="text" v-model="username" placeholder="username">
     <input type="password" v-model="password" placeholder="password">
     <button @click="login">Login</button>

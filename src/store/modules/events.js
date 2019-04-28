@@ -1,14 +1,14 @@
 const state = {
-    distributors: []
+    events: []
 }
 
 const getters = {
-    getDistributors: state => state.distributors
+    getEvents: state => state.events
 }
 
 const mutations = {
-    addDistributors (state, elem) {
-        state.distributors.push(elem)
+    addEvents (state, elem) {
+        state.events.push(elem)
     },
     sortDistributors (state) {
         let lang = localStorage.getItem('vue-lang')
