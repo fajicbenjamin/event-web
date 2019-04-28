@@ -7,6 +7,10 @@ import messages from './lang/translations'
 import VueI18n from 'vue-i18n'
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
+import Vuetify from 'vuetify'
+import 'vuetify/dist/vuetify.min.css'
+
+Vue.use(Vuetify)
 
 Vue.use(Buefy)
 

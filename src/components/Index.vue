@@ -4,9 +4,11 @@
 
     <p>{{ $t('message.hello') }}</p>
 
-    <section>
-      <event-table :data="events"></event-table>
-    </section>
+    <event-calendar></event-calendar>
+
+<!--    <section>-->
+<!--      <event-table :data="events"></event-table>-->
+<!--    </section>-->
 
     <section>
       <button class="button is-primary is-medium"
@@ -25,12 +27,12 @@
 import {api} from "../main";
 import { mapGetters } from 'vuex'
 import LoginModal from '../components/LoginModal'
-import EventTable from './EventTable'
+import EventCalendar from "./EventCalendar";
 
 export default {
   components: {
-    LoginModal,
-    EventTable
+    EventCalendar,
+    LoginModal
   },
   name: 'Index',
   props: {

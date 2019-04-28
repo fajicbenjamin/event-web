@@ -22,19 +22,16 @@ const mutations = {
 }
 
 const actions = {
-    // async fetchDistributors ({ commit }) {
-    //     api.fetchDistributors().then(function (data) {
-    //         data.data.data.forEach((elem) => {
-    //             commit('addDistributors',
-    //                 {
-    //                     value: elem.id,
-    //                     label: elem.display_name
-    //                 }
-    //             )
-    //         })
-    //         commit('sortDistributors')
-    //     })
-    // }
+    async fetchEvents ({ commit }, eventsArray) {
+            eventsArray.forEach((elem) => {
+                commit('addEvents',
+                    {
+                        name: elem.name,
+                    }
+                )
+            })
+            // commit('sortDistributors')
+    }
 }
 
 export default {
