@@ -1,34 +1,8 @@
 <template>
     <section>
-        <b-field grouped group-multiline>
-            <div class="control">
-                <b-switch v-model="isBordered">Bordered</b-switch>
-            </div>
-            <div class="control">
-                <b-switch v-model="isStriped">Striped</b-switch>
-            </div>
-            <div class="control">
-                <b-switch v-model="isNarrowed">Narrowed</b-switch>
-            </div>
-            <div class="control">
-                <b-switch v-model="isHoverable">Hoverable</b-switch>
-            </div>
-            <div class="control">
-                <b-switch v-model="isFocusable">Focusable</b-switch>
-            </div>
-            <div class="control">
-                <b-switch v-model="isLoading">Loading state</b-switch>
-            </div>
-            <div class="control">
-                <b-switch v-model="isEmpty">Empty</b-switch>
-            </div>
-            <div class="control">
-                <b-switch v-model="hasMobileCards">Mobile cards <small>(collapsed rows)</small></b-switch>
-            </div>
-        </b-field>
-
+        <span class="center headline">{{ $tc('event', 2) }}</span>
         <b-table
-                :data="isEmpty ? [] : data"
+                :data="isEmpty ? [] : events"
                 :bordered="isBordered"
                 :striped="isStriped"
                 :narrowed="isNarrowed"
@@ -59,6 +33,23 @@
                 <b-table-column label="Available places">
                     {{ props.row.availablePlaces }}
                 </b-table-column>
+
+                <b-table-column :label="$i18n.tc('category')">
+                    {{ props.row.category.name }}
+                </b-table-column>
+
+                <b-table-column :label="$i18n.tc('location')">
+                    {{ props.row.location.name }}
+                </b-table-column>
+
+                    <b-table-column label="Actions">
+                    <v-btn icon small @click="editEvent(props.row.id)">
+                        <v-icon>edit</v-icon>
+                    </v-btn>
+                    <v-btn icon small @click="deleteEvent(props.row.id, props.index)">
+                        <v-icon>delete</v-icon>
+                    </v-btn>
+                </b-table-column>
             </template>
 
             <template slot="empty">
@@ -79,14 +70,37 @@
 </template>
 
 <script>
-    // import {api} from "../main";
+    import BTableColumn from "buefy/src/components/table/TableColumn";
+    import { mapGetters } from 'vuex'
+    import {api} from "../main";
+
     export default {
-        props: ['data'],
+        components: {BTableColumn},
+        computed: {
+            ...mapGetters({
+                isLoggedIn: 'isLoggedIn',
+                events: 'getEvents'
+            }),
+        },
+        methods: {
+            editEvent(id) {
+                console.log(id)
+            },
+            deleteEvent(id, index) {
+                this.$http.delete(api + '/events/' + id).then(() => {
+                    this.events.splice(index, 1)
+                    this.$toast.open({
+                        message: 'Successfully deleted event!',
+                        type: 'is-success'
+                    })
+                })
+            }
+        },
         data() {
             return {
                 isEmpty: false,
-                isBordered: false,
-                isStriped: false,
+                isBordered: true,
+                isStriped: true,
                 isNarrowed: false,
                 isHoverable: false,
                 isFocusable: false,

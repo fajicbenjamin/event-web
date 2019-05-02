@@ -13,6 +13,10 @@
 export default {
   name: 'app',
   components: {
+  },
+  created() {
+    let promise = this.$store.dispatch('fetchEvents', { self: this })
+    this.$store.commit('setPromise', promise)
   }
 }
 </script>

@@ -2,7 +2,9 @@
   <div class="hello">
     <h1>{{ msg }}</h1>
 
-    <p>{{ $t('message.hello') }}</p>
+    <a href="" @click="$router.push('admin')">da</a>
+
+    <p>{{ $t('hello') }}</p>
 
     <event-calendar></event-calendar>
 
@@ -24,7 +26,6 @@
 </template>
 
 <script>
-import {api} from "../main";
 import { mapGetters } from 'vuex'
 import LoginModal from '../components/LoginModal'
 import EventCalendar from "./EventCalendar";
@@ -40,21 +41,18 @@ export default {
   },
   data: () => ({
     isComponentModalActive: false,
-    events: []
+    // events: []
   }),
   computed: {
     ...mapGetters({
       isLoggedIn: 'isLoggedIn',
+      events: 'getEvents'
     }),
   },
   methods: {
     // methods
   },
   created() {
-    console.log(this.isLoggedIn)
-    this.$http.get(api + '/events').then( response => {
-      this.events = response.data.content
-    })
   }
 }
 </script>

@@ -8,29 +8,14 @@
         >
             <v-list dense>
                 <template v-for="item in items">
-                    <v-layout
-                            v-if="item.heading"
-                            :key="item.heading"
-                            row
-                            align-center
-                    >
-                        <v-flex xs6>
-                            <v-subheader v-if="item.heading">
-                                {{ item.heading }}
-                            </v-subheader>
-                        </v-flex>
-                        <v-flex xs6 class="text-xs-center">
-                            <a href="#!" class="body-2 black--text">EDIT</a>
-                        </v-flex>
-                    </v-layout>
                     <v-list-group
-                            v-else-if="item.children"
+                            v-if="item.children"
                             :key="item.text"
                             v-model="item.model"
                             :prepend-icon="item.model ? item.icon : item['icon-alt']"
                             append-icon=""
                     >
-                        <template v-slot:activator>
+                        <template #activator>
                             <v-list-tile>
                                 <v-list-tile-content>
                                     <v-list-tile-title>
@@ -54,7 +39,7 @@
                             </v-list-tile-content>
                         </v-list-tile>
                     </v-list-group>
-                    <v-list-tile v-else :key="item.text" @click="alert('hello')">
+                    <v-list-tile v-else :key="item.text" @click="switchTab(item.text)" :style="getActiveItem(item)">
                         <v-list-tile-action>
                             <v-icon>{{ item.icon }}</v-icon>
                         </v-list-tile-action>
@@ -76,16 +61,8 @@
         >
             <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
                 <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-                <span class="hidden-sm-and-down">Google Contacts</span>
+                <a href="" @click="$router.push('/')" class="white--text"><span class="hidden-sm-and-down" v-t="'app'"></span></a>
             </v-toolbar-title>
-            <v-text-field
-                    flat
-                    solo-inverted
-                    hide-details
-                    prepend-inner-icon="search"
-                    label="Search"
-                    class="hidden-sm-and-down"
-            ></v-text-field>
             <v-spacer></v-spacer>
             <v-btn icon>
                 <v-icon>apps</v-icon>
@@ -94,36 +71,11 @@
                 <v-icon>notifications</v-icon>
             </v-btn>
             <v-btn icon large>
-                <v-avatar size="32px" tile>
-                    <img
-                            src="https://cdn.vuetifyjs.com/images/logos/logo.svg"
-                            alt="Vuetify"
-                    >
-                </v-avatar>
+                <v-icon>perm_identity</v-icon>
             </v-btn>
         </v-toolbar>
-        <v-content>
-            <v-container fluid fill-height>
-                <v-layout justify-center align-center>
-                    <v-tooltip right>
-                        <template v-slot:activator="{ on }">
-                            <event-table :data="events"></event-table>
-<!--                            <v-btn :href="source" icon large target="_blank" v-on="on">-->
-<!--                                <v-icon large>code</v-icon>-->
-<!--                            </v-btn>-->
-                        </template>
-                        <span>Source</span>
-                    </v-tooltip>
-                    <v-tooltip right>
-                        <template v-slot:activator="{ on }">
-                            <v-btn icon large href="https://codepen.io/johnjleider/pen/EQOYVV" target="_blank" v-on="on">
-                                <v-icon large>mdi-codepen</v-icon>
-                            </v-btn>
-                        </template>
-                        <span>Codepen</span>
-                    </v-tooltip>
-                </v-layout>
-            </v-container>
+        <v-content class="custom-container">
+            <dashboard-content class="mr-4 ml-4"></dashboard-content>
         </v-content>
         <v-btn
                 fab
@@ -203,60 +155,58 @@
 </template>
 
 <script>
-    import EventTable from "./EventTable";
-    import {api} from "../main";
+    import DashboardContent from './Content.vue'
+    import { mapGetters } from 'vuex'
 
     export default {
         name: 'admin',
-        components: {EventTable},
+        components: {
+            DashboardContent
+        },
         data: () => ({
             dialog: false,
             drawer: null,
-            items: [
-                { icon: 'contacts', text: 'Contacts' },
-                { icon: 'history', text: 'Frequently contacted' },
-                { icon: 'content_copy', text: 'Duplicates' },
-                {
-                    icon: 'keyboard_arrow_up',
-                    'icon-alt': 'keyboard_arrow_down',
-                    text: 'Labels',
-                    model: true,
-                    children: [
-                        { icon: 'add', text: 'Create label' }
-                    ]
-                },
-                {
-                    icon: 'keyboard_arrow_up',
-                    'icon-alt': 'keyboard_arrow_down',
-                    text: 'More',
-                    model: false,
-                    children: [
-                        { text: 'Import' },
-                        { text: 'Export' },
-                        { text: 'Print' },
-                        { text: 'Undo changes' },
-                        { text: 'Other contacts' }
-                    ]
-                },
-                { icon: 'settings', text: 'Settings' },
-                { icon: 'chat_bubble', text: 'Send feedback' },
-                { icon: 'help', text: 'Help' },
-                { icon: 'phonelink', text: 'App downloads' },
-                { icon: 'keyboard', text: 'Go to the old version' }
-            ],
-            events: []
+            items: [],
         }),
-        props: {
-            source: String
+        computed: {
+            ...mapGetters({
+                isLoggedIn: 'isLoggedIn',
+                events: 'getEvents',
+                activeTab: 'getActiveTab'
+            }),
+        },
+        methods: {
+            switchTab(child) {
+                this.$router.push(child.toLowerCase())
+            },
+            getActiveItem(item) {
+                return this.$route.name === item.text ? 'background: rgba(0,0,0,0.15);' : ''
+            }
         },
         created() {
-            this.$http.get(api + '/events').then( response => {
-                this.events = response.data.content
-            })
+            // push localised strings in menu
+            this.items.push(
+                { icon: 'dashboard', text: this.$i18n.t('overview')},
+                { icon: 'event', text: this.$i18n.tc('event', 2) },
+                { icon: 'account_box', text: this.$i18n.tc('user', 2) },
+                { icon: 'location_on', text: this.$i18n.tc('location', 2) },
+                {
+                    icon: 'keyboard_arrow_up',
+                    'icon-alt': 'keyboard_arrow_down',
+                    text: this.$i18n.tc('category', 2),
+                    model: true,
+                    children: [
+                        { icon: 'add', text: this.$i18n.t('createCategory') }
+                    ]
+                },
+            )
         }
     }
 </script>
 
 <style scoped>
+    .custom-container {
+        margin-top: -100px;
+    }
 
 </style>

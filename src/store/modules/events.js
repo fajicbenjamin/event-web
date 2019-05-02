@@ -1,36 +1,40 @@
+import {api} from "../../main";
+import axios from 'axios'
+
 const state = {
-    events: []
+    events: [],
+    promise: null,
 }
 
 const getters = {
-    getEvents: state => state.events
+    getEvents: state => state.events,
+    getPromise: state => state.promise
 }
 
 const mutations = {
-    addEvents (state, elem) {
+    addEvent (state, elem) {
         state.events.push(elem)
     },
-    sortDistributors (state) {
-        let lang = localStorage.getItem('vue-lang')
-
-        state.distributors.sort(function (a, b) {
-            if (a.label[lang] < b.label[lang]) return -1
-            if (a.label[lang] > b.label[lang]) return 1
-            return 0
-        })
-    }
+    setPromise (state, promise) {
+        state.promise = promise
+    },
 }
 
 const actions = {
-    async fetchEvents ({ commit }, eventsArray) {
-            eventsArray.forEach((elem) => {
-                commit('addEvents',
-                    {
-                        name: elem.name,
-                    }
-                )
-            })
-            // commit('sortDistributors')
+    fetchEvents({ commit })  {
+        return new Promise((resolve, reject) => {
+            axios.get(api + '/events')
+                .then((response) => {
+                    response.data.forEach(event => {
+                        commit('addEvent', event)
+                    })
+                    resolve()
+                })
+                .catch((error => {
+                    console.log(error.statusText);
+                    reject()
+                }));
+        });
     }
 }
 

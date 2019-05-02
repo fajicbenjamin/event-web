@@ -7,7 +7,7 @@
                         :value="today"
                         color="primary"
                 >
-                    <template v-slot:day="{ date }">
+                    <template #day="{ date }">
                         <template v-for="event in eventsMap[date]">
                             <v-menu
                                     :key="event.title"
@@ -15,7 +15,7 @@
                                     full-width
                                     offset-x
                             >
-                                <template v-slot:activator="{ on }">
+                                <template #activator="{ on }">
                                     <div
                                             v-if="!event.time"
                                             v-ripple
@@ -33,17 +33,7 @@
                                             color="primary"
                                             dark
                                     >
-                                        <v-btn icon>
-                                            <v-icon>edit</v-icon>
-                                        </v-btn>
                                         <v-toolbar-title v-html="event.title"></v-toolbar-title>
-                                        <v-spacer></v-spacer>
-                                        <v-btn icon>
-                                            <v-icon>favorite</v-icon>
-                                        </v-btn>
-                                        <v-btn icon>
-                                            <v-icon>more_vert</v-icon>
-                                        </v-btn>
                                     </v-toolbar>
                                     <v-card-title primary-title>
                                         <span v-html="event.details"></span>
@@ -51,9 +41,10 @@
                                     <v-card-actions>
                                         <v-btn
                                                 flat
-                                                color="secondary"
+                                                color="primary"
+                                                @click="seeEvent(event)"
                                         >
-                                            Cancel
+                                            See event
                                         </v-btn>
                                     </v-card-actions>
                                 </v-card>
@@ -67,40 +58,47 @@
 </template>
 
 <script>
-    import {api} from "../main";
+    import { mapGetters } from 'vuex'
 
     export default {
         data: () => ({
             today: '',
-            events: []
+            calendarEvents: []
         }),
         computed: {
+            ...mapGetters({
+                isLoggedIn: 'isLoggedIn',
+                events: 'getEvents',
+                promise: 'getPromise'
+            }),
             // convert the list of events into a map of lists keyed by date
             eventsMap () {
                 const map = {}
-                this.events.forEach(e => (map[e.date] = map[e.date] || []).push(e))
+                this.calendarEvents.forEach(e => (map[e.date] = map[e.date] || []).push(e))
                 return map
             }
         },
         methods: {
-            open (event) {
-                alert(event.title)
+            seeEvent (event) {
+                alert(event.id)
             }
         },
         created() {
             this.today = new Date().toISOString().slice(0, 10)
-            this.$http.get(api + '/events').then( response => {
-                let events = response.data.content
-                events.forEach((event) => {
-                    let startTime = new Date(event.startTime.toLocaleString())
-                    this.events.push({
-                        date: startTime.toISOString().slice(0, 10),
-                        title: event.name,
-                        details: event.description,
-                        open: false
+            if (this.promise) {
+                this.promise.then(() => {
+                    this.events.forEach((event) => {
+                        let startTime = new Date(event.startTime.toLocaleString())
+                        this.calendarEvents.push({
+                            id: event.id,
+                            date: startTime.toISOString().slice(0, 10),
+                            title: event.name,
+                            details: event.description,
+                            open: false
+                        })
                     })
                 })
-            })
+            }
         }
     }
 </script>
