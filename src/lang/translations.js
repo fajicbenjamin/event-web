@@ -22,7 +22,10 @@ export default {
         address: 'Address',
         city: 'City | Cities',
         country: 'Country | Countries',
+        region: 'Region',
         password: 'Password',
+        latitude: 'Latitude',
+        longitude: 'Longitude',
     },
     bs: {
         app: 'Organizator',
@@ -47,6 +50,9 @@ export default {
         address: 'Adresa',
         city: 'Grad | Gradovi',
         country: 'Država | Države',
-        password: 'Šifra'
+        region: 'Regija',
+        password: 'Šifra',
+        latitude: 'Geografska širina',
+        longitude: 'Geografska dužina',
     }
 }
