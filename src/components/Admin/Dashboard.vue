@@ -77,17 +77,17 @@
         <v-content class="custom-container">
             <dashboard-content class="mr-4 ml-4"></dashboard-content>
         </v-content>
-        <v-btn
-                fab
-                bottom
-                right
-                color="pink"
-                dark
-                fixed
-                @click="dialog = !dialog"
-        >
-            <v-icon>add</v-icon>
-        </v-btn>
+<!--        <v-btn-->
+<!--                fab-->
+<!--                bottom-->
+<!--                right-->
+<!--                color="pink"-->
+<!--                dark-->
+<!--                fixed-->
+<!--                @click="dialog = !dialog"-->
+<!--        >-->
+<!--            <v-icon>add</v-icon>-->
+<!--        </v-btn>-->
         <v-dialog v-model="dialog" width="800px">
             <v-card>
                 <v-card-title
@@ -177,7 +177,7 @@
         },
         methods: {
             switchTab(child) {
-                this.$router.push(child.toLowerCase())
+                this.$router.push('/admin/' + child.toLowerCase())
             },
             getActiveItem(item) {
                 return this.$route.name === item.text ? 'background: rgba(0,0,0,0.15);' : ''

@@ -1,8 +1,8 @@
 <template>
     <section>
-        <span class="center headline">{{ $tc('event', 2) }}</span>
+        <span class="center headline">{{ $tc('location', 2) }}</span>
         <b-table
-                :data="isEmpty ? [] : events"
+                :data="isEmpty ? [] : locations"
                 :bordered="isBordered"
                 :striped="isStriped"
                 :narrowed="isNarrowed"
@@ -16,37 +16,27 @@
                     {{ props.row.id }}
                 </b-table-column>
 
-                <b-table-column field="name" label="Name">
+                <b-table-column field="name" :label="$i18n.tc('name')">
                     {{ props.row.name }}
                 </b-table-column>
 
-                <b-table-column field="description" label="Description">
-                    {{ props.row.description }}
+                <b-table-column field="address" :label="$i18n.tc('address')">
+                    {{ props.row.address }}
                 </b-table-column>
 
-                <b-table-column field="date" label="Start time" centered>
-                    <span class="tag is-success">
-                        {{ new Date(props.row.startTime).toLocaleString() }}
-                    </span>
+                <b-table-column :label="$i18n.tc('city')">
+                    {{ props.row.city }}
                 </b-table-column>
 
-                <b-table-column label="Available places">
-                    {{ props.row.availablePlaces }}
+                <b-table-column :label="$i18n.tc('country')">
+                    {{ props.row.country }}
                 </b-table-column>
 
-                <b-table-column :label="$i18n.tc('category')">
-                    {{ props.row.category.name }}
-                </b-table-column>
-
-                <b-table-column :label="$i18n.tc('location')">
-                    {{ props.row.location.name }}
-                </b-table-column>
-
-                    <b-table-column label="Actions">
-                    <v-btn icon small @click="editEvent(props.row.id)">
+                <b-table-column :label="$i18n.tc('action', 2)">
+                    <v-btn icon small @click="editLocation(props.row.id)">
                         <v-icon>edit</v-icon>
                     </v-btn>
-                    <v-btn icon small @click="deleteEvent(props.row.id, props.index)">
+                    <v-btn icon small @click="deleteLocation(props.row.id, props.index)">
                         <v-icon>delete</v-icon>
                     </v-btn>
                 </b-table-column>
@@ -61,7 +51,7 @@
                                     size="is-large">
                             </b-icon>
                         </p>
-                        <p>Nothing here.</p>
+                        <p>{{ $t('emptyTable') }}</p>
                     </div>
                 </section>
             </template>
@@ -72,7 +62,7 @@
 <script>
     import BTableColumn from "buefy/src/components/table/TableColumn";
     import { mapGetters } from 'vuex'
-    import {api} from "../main";
+    import {api} from "../../../main";
 
     export default {
         components: {BTableColumn},
@@ -83,14 +73,14 @@
             }),
         },
         methods: {
-            editEvent(id) {
-                console.log(id)
+            editLocation(id) {
+                this.$router.push(`locations/${id}`)
             },
-            deleteEvent(id, index) {
-                this.$http.delete(api + '/events/' + id).then(() => {
-                    this.events.splice(index, 1)
+            deleteLocation(id, index) {
+                this.$http.delete(api + '/locations/' + id).then(() => {
+                    this.locations.splice(index, 1)
                     this.$toast.open({
-                        message: 'Successfully deleted event!',
+                        message: 'Successfully deleted location!',
                         type: 'is-success'
                     })
                 })
@@ -98,6 +88,7 @@
         },
         data() {
             return {
+                locations: [],
                 isEmpty: false,
                 isBordered: true,
                 isStriped: true,
@@ -107,6 +98,11 @@
                 isLoading: false,
                 hasMobileCards: true
             }
+        },
+        created() {
+            this.$http.get(api + '/locations').then(response => {
+                this.locations = response.data.content
+            })
         }
     }
 </script>

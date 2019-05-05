@@ -11,9 +11,7 @@ import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 
 Vue.use(Vuetify)
-
 Vue.use(Buefy)
-
 Vue.use(VueI18n)
 
 // Create VueI18n instance with options

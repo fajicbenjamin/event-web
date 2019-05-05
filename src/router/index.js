@@ -1,10 +1,14 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Index from '@/components/Index'
-import Dashboard from '@/components/Dashboard'
-import Overview from '@/components/Overview'
-// import Events from '@/components/Events'
-import EventTable from "../components/EventTable";
+import EventsIndex from "../components/Admin/Events/Index";
+import Index from "../components/Index";
+import Dashboard from "../components/Admin/Dashboard";
+import Overview from "../components/Admin/Overview";
+import UsersIndex from "../components/Admin/Users/Index";
+import User from "../components/Admin/Users/User";
+import Event from "../components/Admin/Events/Event";
+import LocationsIndex from "../components/Admin/Locations/Index";
+import Location from "../components/Admin/Locations/Location";
 
 Vue.use(Router)
 
@@ -29,13 +33,33 @@ export default new Router({
                 {
                     path: 'events',
                     name: 'Events',
-                    component: EventTable
+                    component: EventsIndex
                 },
                 {
-                    path: 'event/:id',
+                    path: 'events/:id',
                     name: 'Event',
                     component: Event
                     // props: true
+                },
+                {
+                    path: 'users',
+                    name: 'Users',
+                    component: UsersIndex
+                },
+                {
+                    path: 'users/:id',
+                    name: 'User',
+                    component: User
+                },
+                {
+                    path: 'locations',
+                    name: 'Locations',
+                    component: LocationsIndex
+                },
+                {
+                    path: 'locations/:id',
+                    name: 'Location',
+                    component: Location
                 }
             ]
         }

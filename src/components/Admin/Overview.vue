@@ -1,10 +1,11 @@
 <template>
-    <div></div>
+    <div>
+        <span class="center headline">{{ $t('overview') }}</span>
+    </div>
 </template>
 
 <script>
     export default {
-        name: "Events.vue"
     }
 </script>
 

@@ -4,13 +4,7 @@
 
     <a href="" @click="$router.push('admin')">da</a>
 
-    <p>{{ $t('hello') }}</p>
-
     <event-calendar></event-calendar>
-
-<!--    <section>-->
-<!--      <event-table :data="events"></event-table>-->
-<!--    </section>-->
 
     <section>
       <button class="button is-primary is-medium"
