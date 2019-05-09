@@ -80,7 +80,7 @@
         },
         methods: {
             seeEvent (event) {
-                alert(event.id)
+                this.$router.push(`event/${event.id}`)
             }
         },
         created() {

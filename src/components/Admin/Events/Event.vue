@@ -1,7 +1,7 @@
 <template>
     <section>
 <!--        <span class="center headline">{{ $tc('event', 2) }}</span>-->
-        <span class="center headline">Create event</span>
+        <span class="center headline">{{ create ? 'Create' : 'Edit' }} event</span>
         <v-card flat>
             <v-form ref="form" @submit.prevent="submit">
                 <v-container grid-list-xl fluid>
@@ -119,6 +119,11 @@
                             type="submit"
                     >Save</v-btn>
                 </v-card-actions>
+                <hr>
+                <v-flex xs10 class="member-table" v-if="currentEvent">
+                    <span class="font-weight-thin title">Guests on this event</span>
+                    <members-table :event="currentEvent"></members-table>
+                </v-flex>
             </v-form>
         </v-card>
     </section>
@@ -127,9 +132,15 @@
 <script>
     import { mapGetters } from 'vuex'
     import {api} from "../../../main";
+    import MembersTable from './MembersTable.vue'
 
     export default {
+        components: {
+          MembersTable
+        },
         data: () => ({
+            currentEvent: null,
+            create: true,
             form: {
                 name: '',
                 description: '',
@@ -157,7 +168,7 @@
             ...mapGetters({
                 isLoggedIn: 'isLoggedIn',
                 events: 'getEvents',
-                currentEvent: 'getCurrentEvent'
+                // currentEvent: 'getCurrentEvent'
             }),
             formIsValid () {
                 return (
@@ -236,26 +247,34 @@
                 })
             })
 
-            if (!this.currentEvent) {
-                let id = parseInt(this.$route.params.id)
-                let event = this.events.find(x => x.id === id)
-                this.$store.commit('setCurrentEvent', event)
+            let id = parseInt(this.$route.params.id)
+            if (id) {
+                this.create = false
+                this.$http.get(api + '/events/' + id).then(response => {
+                    this.currentEvent = response.data
+                    this.form.name = this.currentEvent.name
+                    this.form.description = this.currentEvent.description
+                    this.form.availablePlaces = this.currentEvent.availablePlaces
+                    this.form.registration = this.currentEvent.registration
+                    this.form.repeating = this.currentEvent.repeating
+                    this.form.category = this.categoryNames.find(x => x === this.currentEvent.category.name)
+                    this.form.location = this.locationNames.find(x => x === this.currentEvent.location.name)
+                    this.form.startPickerDate = this.currentEvent.startTime.substr(0, 10) // take date from timestamp
+                    this.form.startPickerTime = this.currentEvent.startTime.substr(11, 5) // take time from timestamp
+                }).catch(() => {
+                    this.$router.push('/admin/events')
+                })
+            } else if (this.$route.params.id !== 'create') {
+                this.$router.push('/admin/events')
             }
-            console.log(this.currentEvent)
-
-            this.form.name = this.currentEvent.name
-            this.form.description = this.currentEvent.description
-            this.form.availablePlaces = this.currentEvent.availablePlaces
-            this.form.registration = this.currentEvent.registration
-            this.form.repeating = this.currentEvent.repeating
-            this.form.category = this.categoryNames.find(x => x === this.currentEvent.category.name)
-            this.form.location = this.locationNames.find(x => x === this.currentEvent.location.name)
-            this.form.startPickerDate = this.currentEvent.startTime.substr(0, 10) // take date from timestamp
-            this.form.startPickerTime = this.currentEvent.startTime.substr(11, 5) // take time from timestamp
         }
     }
 </script>
 
 <style scoped>
-
+    .member-table {
+        margin: 20px auto;
+        padding-bottom: 20px;
+        text-align: center;
+    }
 </style>

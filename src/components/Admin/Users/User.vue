@@ -126,17 +126,16 @@
             },
         },
         created() {
-            if (parseInt(this.$route.params.id)) {
+            let id = parseInt(this.$route.params.id)
+            if (id) {
                 this.create = false
-                this.$http.get(api + '/users').then(response => {
-                    this.user = response.data.find(x => x.id === parseInt(this.$route.params.id))
-                    if (!this.user) {
-                        this.$router.push('/admin/users')
-                    } else {
-                        this.form.username = this.user.username
-                        this.form.email = this.user.email
-                        this.form.isAdmin = this.user.admin
-                    }
+                this.$http.get(api + '/users/' + id).then(response => {
+                    this.user = response.data
+                    this.form.username = this.user.username
+                    this.form.email = this.user.email
+                    this.form.isAdmin = this.user.admin
+                }).catch(() => {
+                    this.$router.push('/admin/users')
                 })
             } else if (this.$route.params.id !== 'create') {
                 this.$router.push('/admin/users')

@@ -9,6 +9,9 @@ import User from "../components/Admin/Users/User";
 import Event from "../components/Admin/Events/Event";
 import LocationsIndex from "../components/Admin/Locations/Index";
 import Location from "../components/Admin/Locations/Location";
+import CategoriesIndex from "../components/Admin/Categories/Index";
+import EventPage from "../components/Pages/Event";
+import Login from "../components/Admin/Login";
 
 Vue.use(Router)
 
@@ -21,9 +24,26 @@ export default new Router({
             component: Index
         },
         {
+            path: '/login',
+            name: 'Login',
+            component: Login
+        },
+        {
+            path: '/event/:id',
+            name: 'EventPage',
+            component: EventPage
+        },
+        {
             path: '/admin',
             component: Dashboard,
             redirect: '/admin/overview',
+            beforeEnter(to, from, next) {
+                if (localStorage.getItem('token')) {
+                    next();
+                } else {
+                    next('/login');
+                }
+            },
             children: [
                 {
                     path: 'overview',
@@ -60,6 +80,11 @@ export default new Router({
                     path: 'locations/:id',
                     name: 'Location',
                     component: Location
+                },
+                {
+                    path: 'categories',
+                    name: 'Categories',
+                    component: CategoriesIndex
                 }
             ]
         }

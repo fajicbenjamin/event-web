@@ -26,6 +26,8 @@ export default {
         password: 'Password',
         latitude: 'Latitude',
         longitude: 'Longitude',
+        reserve: 'Make reservation',
+        guestsOnEvent: 'Guests on this event',
     },
     bs: {
         app: 'Organizator',
@@ -54,5 +56,7 @@ export default {
         password: 'Šifra',
         latitude: 'Geografska širina',
         longitude: 'Geografska dužina',
+        reserve: 'Rezerviši',
+        guestsOnEvent: 'Gosti na ovom događaju',
     }
 }

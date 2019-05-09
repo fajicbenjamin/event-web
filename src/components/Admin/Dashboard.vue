@@ -27,7 +27,7 @@
                         <v-list-tile
                                 v-for="(child, i) in item.children"
                                 :key="i"
-                                @click="alert('hello')"
+                                @click="switchTab(item.text)"
                         >
                             <v-list-tile-action v-if="child.icon">
                                 <v-icon>{{ child.icon }}</v-icon>
@@ -206,7 +206,7 @@
 
 <style scoped>
     .custom-container {
-        margin-top: -100px;
+        margin-top: 30px;
     }
 
 </style>

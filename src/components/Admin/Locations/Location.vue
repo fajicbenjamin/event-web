@@ -154,21 +154,20 @@
             },
         },
         created() {
-            if (parseInt(this.$route.params.id)) {
+            let id = parseInt(this.$route.params.id)
+            if (id) {
                 this.create = false
-                this.$http.get(api + '/locations').then(response => {
-                    this.location = response.data.content.find(x => x.id === parseInt(this.$route.params.id))
-                    if (!this.location) {
-                        this.$router.push('/admin/locations')
-                    } else {
-                        this.form.name = this.location.name
-                        this.form.country = this.location.country
-                        this.form.region = this.location.region
-                        this.form.city = this.location.city
-                        this.form.address = this.location.address
-                        this.form.latitude = this.location.latitude
-                        this.form.longitude = this.location.longitude
-                    }
+                this.$http.get(api + '/locations/' + id).then(response => {
+                    this.location = response.data
+                    this.form.name = this.location.name
+                    this.form.country = this.location.country
+                    this.form.region = this.location.region
+                    this.form.city = this.location.city
+                    this.form.address = this.location.address
+                    this.form.latitude = this.location.latitude
+                    this.form.longitude = this.location.longitude
+                }).catch(() => {
+                    this.$router.push('/admin/locations')
                 })
             } else if (this.$route.params.id !== 'create') {
                 this.$router.push('/admin/locations')

@@ -1,6 +1,10 @@
 <template>
     <section>
-        <span class="center headline">{{ $tc('location', 2) }}</span>
+        <v-card-actions>
+            <span class="center headline">{{ $tc('location', 2) }}</span>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" dark @click="$router.push('locations/create')">New {{ $tc('location') }}</v-btn>
+        </v-card-actions>
         <b-table
                 :data="isEmpty ? [] : locations"
                 :bordered="isBordered"
