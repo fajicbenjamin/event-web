@@ -28,6 +28,7 @@ export default {
         longitude: 'Longitude',
         reserve: 'Make reservation',
         guestsOnEvent: 'Guests on this event',
+        successfullyLogged: 'You have successfully logged in.',
     },
     bs: {
         app: 'Organizator',
@@ -58,5 +59,6 @@ export default {
         longitude: 'Geografska dužina',
         reserve: 'Rezerviši',
         guestsOnEvent: 'Gosti na ovom događaju',
+        successfullyLogged: 'Uspješno ste se ulogovali.'
     }
 }
