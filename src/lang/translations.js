@@ -1,6 +1,7 @@
 export default {
     en: {
         app: 'Eventer',
+        footer: 'Benjamin &copy; 2019',
         overview: 'Overview',
         event: 'Event | Events',
         category: 'Category | Categories',
@@ -32,6 +33,7 @@ export default {
     },
     bs: {
         app: 'Organizator',
+        footer: 'Benjamin &copy; 2019',
         overview: 'Detalji',
         event: 'Događaji',
         category: 'Kategorija | Kategorije',

@@ -13,10 +13,6 @@
         <div>{{ event.location.address }}</div>
         <div>{{ event.location.city }}, {{ event.location.country }}</div>
         <v-btn v-if="event.registration">Make reservation</v-btn>
-        <v-footer class="pa-3 v-footer--absolute">
-            <v-spacer></v-spacer>
-            <div>&copy; 2019</div>
-        </v-footer>
     </section>
 </template>
 

@@ -1,11 +1,13 @@
 <template>
     <v-layout>
         <v-flex>
-            <v-sheet height="500">
+            <v-sheet height="500" class="elevation-3 mb-2">
                 <v-calendar
                         :now="today"
                         :value="today"
                         color="primary"
+                        ref="calendar"
+                        v-model="start"
                 >
                     <template #day="{ date }">
                         <template v-for="event in eventsMap[date]">
@@ -34,6 +36,8 @@
                                             dark
                                     >
                                         <v-toolbar-title v-html="event.title"></v-toolbar-title>
+                                        <v-spacer></v-spacer>
+                                        {{ event.date }}
                                     </v-toolbar>
                                     <v-card-title primary-title>
                                         <span v-html="event.details"></span>
@@ -53,6 +57,24 @@
                     </template>
                 </v-calendar>
             </v-sheet>
+            <v-btn @click="$refs.calendar.prev()">
+                <v-icon
+                        dark
+                        left
+                >
+                    keyboard_arrow_left
+                </v-icon>
+                Prev
+            </v-btn>
+            <v-btn @click="$refs.calendar.next()">
+                Next
+                <v-icon
+                        right
+                        dark
+                >
+                    keyboard_arrow_right
+                </v-icon>
+            </v-btn>
         </v-flex>
     </v-layout>
 </template>
@@ -63,7 +85,17 @@
     export default {
         data: () => ({
             today: '',
-            calendarEvents: []
+            calendarEvents: [],
+            start: '',
+            type: 'month',
+            typeOptions: [
+                { text: 'Day', value: 'day' },
+                { text: '4 Day', value: '4day' },
+                { text: 'Week', value: 'week' },
+                { text: 'Month', value: 'month' },
+                { text: 'Custom Daily', value: 'custom-daily' },
+                { text: 'Custom Weekly', value: 'custom-weekly' }
+            ]
         }),
         computed: {
             ...mapGetters({
