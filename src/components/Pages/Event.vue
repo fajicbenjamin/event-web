@@ -1,30 +1,59 @@
 <template>
-    <section v-if="event">
-        <img :src="api + event.imagePath" alt="">
-        <span class="font-weight-thin display-2">{{ event.name }}</span>
-        <p class="font-weight-thin title">
-            {{ event.description }}
-        </p>
-        <span>{{ event.startTime }}</span>
-        <span class="tag is-success">{{ event.availablePlaces }}</span>
-        <span>{{ event.category.name }}</span>
-        <hr>
-        <span class="title">{{ $tc('location') }}</span>
-        <div>{{ event.location.name }}</div>
-        <div>{{ event.location.address }}</div>
-        <div>{{ event.location.city }}, {{ event.location.country }}</div>
-        <v-btn v-if="event.registration">Make reservation</v-btn>
-    </section>
+    <div>
+        <navbar></navbar>
+        <section v-if="event">
+            <v-flex xs12 sm6 offset-sm3 class="card-custom" hover>
+                <v-card>
+                    <v-img :src="api + event.imagePath" aspect-ratio="2"></v-img>
+
+                    <v-card-title primary-title>
+                        <div>
+                            <span class="font-weight-thin display-2">{{ event.name }}</span>
+                            <p class="font-weight-thin title">
+                                {{ event.description }}
+                            </p>
+                            <div>
+                                {{ new Date(event.startTime).toLocaleString() }}
+                            </div>
+                            <div>
+                                {{ $t('availablePlaces') }}: <span class="tag" :class="available">{{ event.availablePlaces }}</span>
+                            </div>
+                            <div>
+                                {{ $tc('category') }}: {{ event.category.name }}
+                            </div>
+                            <hr>
+                            <div>
+                                <div><span class="title">{{ event.location.name }}</span></div>
+                                <div>{{ event.location.address }}</div>
+                                <div>{{ event.location.city }}, {{ event.location.country }}</div>
+                            </div>
+                        </div>
+                    </v-card-title>
+
+                    <v-card-actions class="card-actions">
+                        <v-btn v-if="!event.registration">{{ $t('reserve') }}</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-flex>
+        </section>
+    </div>
 </template>
 
 <script>
     import {api} from "../../main";
+    import Navbar from "../Navbar";
 
     export default {
+        components: {Navbar},
         data: () => ({
             event: null,
             api
         }),
+        computed: {
+          available() {
+              return this.event.availablePlaces > 0 ? 'is-success' : 'is-danger'
+          }
+        },
         created() {
             let id = parseInt(this.$route.params.id)
             if (id) {
@@ -39,5 +68,18 @@
 </script>
 
 <style scoped>
+    .card-custom {
+        margin-bottom: 30px;
+        padding-bottom: 50px;
+    }
+    .card-actions {
+        padding-bottom: 30px;
+        padding-left: 15px;
+    }
 
+    @media (min-width: 768px) {
+        .card-custom {
+            margin-top: 20px;
+        }
+    }
 </style>
