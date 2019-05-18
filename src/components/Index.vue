@@ -3,7 +3,7 @@
     <navbar></navbar>
 
     <v-flex sm8 offset-sm2 class="calendar-container mt-3">
-      <span class="font-weight-thin display-2">Events</span>
+      <span class="font-weight-thin display-2">{{ $tc('event', 2) }}</span>
       <event-calendar></event-calendar>
     </v-flex>
 

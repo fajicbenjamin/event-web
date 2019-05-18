@@ -11,7 +11,8 @@
                     :key="index"
                     @click="changeLanguage(item.value)"
             >
-                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                <v-list-tile-title>{{ item.name }}</v-list-tile-title>
+                <v-icon v-if="item.value === $i18n.locale">check</v-icon>
             </v-list-tile>
         </v-list>
     </v-menu>
@@ -21,8 +22,8 @@
     export default {
         data: () => ({
             languages: [
-                { title: 'English', value: 'en' },
-                { title: 'Bosanski', value: 'bs' }
+                { name: 'English', value: 'en' },
+                { name: 'Bosanski', value: 'bs' }
             ]
         }),
         methods: {

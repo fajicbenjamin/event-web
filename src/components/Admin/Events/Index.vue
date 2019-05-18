@@ -3,7 +3,7 @@
         <v-card-actions>
             <span class="center headline">{{ $tc('event', 2) }}</span>
             <v-spacer></v-spacer>
-            <v-btn color="primary" dark @click="$router.push('events/create')">New {{ $tc('event') }}</v-btn>
+            <v-btn color="primary" dark @click="$router.push('events/create')">{{ $tc('event') }} <v-icon>add</v-icon></v-btn>
         </v-card-actions>
 
         <b-table

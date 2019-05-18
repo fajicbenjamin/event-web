@@ -48,7 +48,7 @@
                                                 color="primary"
                                                 @click="seeEvent(event)"
                                         >
-                                            See event
+                                            {{ $t('seeEvent') }}
                                         </v-btn>
                                     </v-card-actions>
                                 </v-card>

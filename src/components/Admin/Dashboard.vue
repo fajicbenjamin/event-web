@@ -27,7 +27,7 @@
                         <v-list-tile
                                 v-for="(child, i) in item.children"
                                 :key="i"
-                                @click="switchTab(item.text)"
+                                @click="switchTab(item.value)"
                         >
                             <v-list-tile-action v-if="child.icon">
                                 <v-icon>{{ child.icon }}</v-icon>
@@ -39,7 +39,7 @@
                             </v-list-tile-content>
                         </v-list-tile>
                     </v-list-group>
-                    <v-list-tile v-else :key="item.text" @click="switchTab(item.text)" :style="getActiveItem(item)">
+                    <v-list-tile v-else :key="item.text" @click="switchTab(item.value)" :style="getActiveItem(item)">
                         <v-list-tile-action>
                             <v-icon>{{ item.icon }}</v-icon>
                         </v-list-tile-action>
@@ -64,12 +64,7 @@
                 <a href="" @click="$router.push('/')" class="white--text"><span class="hidden-sm-and-down" v-t="'app'"></span></a>
             </v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn icon>
-                <v-icon>apps</v-icon>
-            </v-btn>
-            <v-btn icon>
-                <v-icon>notifications</v-icon>
-            </v-btn>
+            <language></language>
             <v-btn icon large>
                 <v-icon>perm_identity</v-icon>
             </v-btn>
@@ -83,16 +78,17 @@
 <script>
     import DashboardContent from './Content.vue'
     import { mapGetters } from 'vuex'
+    import Language from "../Language";
 
     export default {
         name: 'admin',
         components: {
+            Language,
             DashboardContent
         },
         data: () => ({
             dialog: false,
             drawer: null,
-            items: [],
         }),
         computed: {
             ...mapGetters({
@@ -100,6 +96,15 @@
                 events: 'getEvents',
                 activeTab: 'getActiveTab'
             }),
+            items() {
+                return [
+                    { icon: 'dashboard', text: this.$i18n.t('overview'), value: 'overview'},
+                    { icon: 'event', text: this.$i18n.tc('event', 2), value: 'events' },
+                    { icon: 'account_box', text: this.$i18n.tc('user', 2), value: 'users' },
+                    { icon: 'location_on', text: this.$i18n.tc('location', 2), value: 'locations' },
+                    { icon: 'category', text: this.$i18n.tc('category', 2), value: 'categories' }
+                ]
+            }
         },
         methods: {
             switchTab(child) {
@@ -108,16 +113,6 @@
             getActiveItem(item) {
                 return this.$route.name === item.text ? 'background: rgba(0,0,0,0.15);' : ''
             }
-        },
-        created() {
-            // push localised strings in menu
-            this.items.push(
-                { icon: 'dashboard', text: this.$i18n.t('overview')},
-                { icon: 'event', text: this.$i18n.tc('event', 2) },
-                { icon: 'account_box', text: this.$i18n.tc('user', 2) },
-                { icon: 'location_on', text: this.$i18n.tc('location', 2) },
-                { icon: 'category', text: this.$i18n.tc('category', 2) }
-            )
         }
     }
 </script>

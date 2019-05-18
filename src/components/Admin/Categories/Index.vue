@@ -3,7 +3,7 @@
         <v-card-actions>
             <span class="center headline">{{ $tc('category', 2) }}</span>
             <v-spacer></v-spacer>
-            <v-btn color="primary" dark @click="$router.push('categories/create')">New {{ $tc('category') }}</v-btn>
+            <v-btn color="primary" dark @click="$router.push('categories/create')">{{ $tc('category') }} <v-icon>add</v-icon></v-btn>
         </v-card-actions>
         <b-table
                 :data="isEmpty ? [] : categories"

@@ -32,6 +32,7 @@ export default {
         successfullyLogged: 'You have successfully logged in.',
         prev: 'Prev',
         next: 'Next',
+        seeEvent: 'See event',
     },
     bs: {
         app: 'Organizator',
@@ -65,6 +66,7 @@ export default {
         guestsOnEvent: 'Gosti na ovom događaju',
         successfullyLogged: 'Uspješno ste se ulogovali.',
         prev: 'Prošli',
-        next: 'Sljedeći'
+        next: 'Sljedeći',
+        seeEvent: 'Pogledaj događaj',
     }
 }

@@ -3,7 +3,7 @@
         <v-card-actions>
             <span class="center headline">{{ $tc('user', 2) }}</span>
             <v-spacer></v-spacer>
-            <v-btn color="primary" dark @click="$router.push('users/create')">New {{ $tc('user') }}</v-btn>
+            <v-btn color="primary" dark @click="$router.push('users/create')">{{ $tc('user') }} <v-icon>add</v-icon></v-btn>
         </v-card-actions>
         <b-table
                 :data="isEmpty ? [] : users"
