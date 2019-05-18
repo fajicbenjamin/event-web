@@ -47,7 +47,7 @@
                     {{ props.row.location.name }}
                 </b-table-column>
 
-                    <b-table-column :label="$i18n.tc('action', 2)">
+                <b-table-column :label="$i18n.tc('action', 2)">
                     <v-btn icon small @click="editEvent(props.row.id)">
                         <v-icon>edit</v-icon>
                     </v-btn>
@@ -94,7 +94,7 @@
                 this.$router.push(`events/${id}`)
             },
             deleteEvent(id, index) {
-                this.$http.delete(api + '/events/' + id).then(() => {
+                this.$http.delete(api + 'events/' + id).then(() => {
                     this.events.splice(index, 1)
                     this.$toast.open({
                         message: 'Successfully deleted event!',

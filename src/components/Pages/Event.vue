@@ -1,5 +1,6 @@
 <template>
     <section v-if="event">
+        <img :src="api + event.imagePath" alt="">
         <span class="font-weight-thin display-2">{{ event.name }}</span>
         <p class="font-weight-thin title">
             {{ event.description }}
@@ -21,12 +22,13 @@
 
     export default {
         data: () => ({
-            event: null
+            event: null,
+            api
         }),
         created() {
             let id = parseInt(this.$route.params.id)
             if (id) {
-                this.$http.get(api + '/events/' + id).then(response => {
+                this.$http.get(api + 'events/' + id).then(response => {
                     this.event = response.data
                 }).catch(() => {
                     this.$router.push('/')

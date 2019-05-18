@@ -29,7 +29,7 @@ if (token) {
   Vue.prototype.$http.defaults.headers.common['Authorization'] = token
 }
 
-export const api = 'http://localhost:8080'
+export const api = 'http://localhost:8080/'
 
 new Vue({
   router,

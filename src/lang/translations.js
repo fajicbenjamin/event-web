@@ -30,6 +30,8 @@ export default {
         reserve: 'Make reservation',
         guestsOnEvent: 'Guests on this event',
         successfullyLogged: 'You have successfully logged in.',
+        prev: 'Prev',
+        next: 'Next',
     },
     bs: {
         app: 'Organizator',
@@ -61,6 +63,8 @@ export default {
         longitude: 'Geografska dužina',
         reserve: 'Rezerviši',
         guestsOnEvent: 'Gosti na ovom događaju',
-        successfullyLogged: 'Uspješno ste se ulogovali.'
+        successfullyLogged: 'Uspješno ste se ulogovali.',
+        prev: 'Prošli',
+        next: 'Sljedeći'
     }
 }

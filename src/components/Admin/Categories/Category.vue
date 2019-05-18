@@ -1,35 +1,16 @@
 <template>
     <section>
-        <span class="center headline">{{ create ? 'Create' : 'Edit' }} user</span>
+        <span class="center headline">{{ create ? 'Create' : 'Edit' }} category</span>
         <v-card flat>
             <v-form ref="form" @submit.prevent="submit">
                 <v-container grid-list-xl fluid>
                     <v-layout wrap>
                         <v-flex xs12 sm6>
                             <v-text-field
-                                    v-model="form.username"
-                                    :rules="rules.username"
-                                    :label="$i18n.tc('username')"
+                                    v-model="form.name"
+                                    :rules="rules.name"
+                                    :label="$i18n.tc('name')"
                                     required
-                            ></v-text-field>
-                        </v-flex>
-                        <v-flex xs12 sm6>
-                            <v-text-field
-                                    type="email"
-                                    v-model="form.email"
-                                    :rules="rules.email"
-                                    label="Email"
-                                    required
-                            ></v-text-field>
-                        </v-flex>
-                        <v-flex xs12>
-                            <v-switch v-model="form.isAdmin" label="Admin"></v-switch>
-                        </v-flex>
-                        <v-flex xs12 sm4>
-                            <v-text-field
-                                    type="password"
-                                    :label="$i18n.tc('password')"
-                                    v-model="form.password"
                             ></v-text-field>
                         </v-flex>
                     </v-layout>
@@ -55,18 +36,12 @@
     export default {
         data: () => ({
             form: {
-                username: '',
-                email: '',
-                password: '',
-                isAdmin: false,
+                name: '',
             },
             rules: {
-                username: [val => (val || '').length > 0 || 'This field is required'],
-                email: [val => !!val || 'E-mail is required',
-                    val => /.+@.+/.test(val) || 'E-mail must be valid'],
-                password: [val => (val || '').length > 6 || 'Password has to be at least 6 characters']
+                name: [val => (val || '').length > 0 || 'This field is required']
             },
-            user: null,
+            category: null,
             create: true
         }),
         computed: {
@@ -77,30 +52,27 @@
             }),
             formIsValid () {
                 return (
-                    this.form.username &&
-                    this.form.email
+                    this.form.name
                 )
             }
         },
         methods: {
             submit () {
                 let formData = {
-                    username: this.form.username,
-                    email: this.form.email,
-                    admin: this.form.isAdmin
+                    name: this.form.name
                 }
 
                 if (this.create) {
-                    this.$http.post(api + 'users', formData).then(response => {
+                    this.$http.post(api + 'categories', formData).then(response => {
                         console.log(response)
                         this.$toast.open({
-                            message: 'Successfully created user!',
+                            message: 'Successfully created category!',
                             type: 'is-success'
                         })
                     }).catch(error => {
                         console.log(error)
                         this.$toast.open({
-                            message: 'Error while creating user!',
+                            message: 'Error while creating category!',
                             type: 'is-danger'
                         })
                     })
@@ -109,16 +81,16 @@
                         formData.password = this.form.password
                     }
                     console.log('da', formData)
-                    this.$http.put(api + 'users/' + this.user.id, formData).then(response => {
+                    this.$http.put(api + 'categories/' + this.category.id, formData).then(response => {
                         console.log(response)
                         this.$toast.open({
-                            message: 'Successfully updated user!',
+                            message: 'Successfully updated category!',
                             type: 'is-success'
                         })
                     }).catch(error => {
                         console.log(error)
                         this.$toast.open({
-                            message: 'Error while updating user!',
+                            message: 'Error while updating category!',
                             type: 'is-danger'
                         })
                     })
@@ -129,16 +101,14 @@
             let id = parseInt(this.$route.params.id)
             if (id) {
                 this.create = false
-                this.$http.get(api + 'users/' + id).then(response => {
-                    this.user = response.data
-                    this.form.username = this.user.username
-                    this.form.email = this.user.email
-                    this.form.isAdmin = this.user.admin
+                this.$http.get(api + 'categories/' + id).then(response => {
+                    this.category = response.data
+                    this.form.name = this.category.name
                 }).catch(() => {
-                    this.$router.push('/admin/users')
+                    this.$router.push('/admin/categories')
                 })
             } else if (this.$route.params.id !== 'create') {
-                this.$router.push('/admin/users')
+                this.$router.push('/admin/categories')
             }
         }
     }

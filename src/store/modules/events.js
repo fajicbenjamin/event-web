@@ -28,7 +28,7 @@ const mutations = {
 const actions = {
     fetchEvents({ commit })  {
         return new Promise((resolve, reject) => {
-            axios.get(api + '/events')
+            axios.get(api + 'events')
                 .then((response) => {
                     response.data.forEach(event => {
                         commit('addEvent', event)

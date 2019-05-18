@@ -64,10 +64,10 @@
                 >
                     keyboard_arrow_left
                 </v-icon>
-                Prev
+                {{ $t('prev') }}
             </v-btn>
             <v-btn @click="$refs.calendar.next()">
-                Next
+                {{ $t('next') }}
                 <v-icon
                         right
                         dark

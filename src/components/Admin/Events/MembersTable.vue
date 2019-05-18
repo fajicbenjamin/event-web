@@ -64,7 +64,7 @@
         },
         methods: {
             deleteGuest(id, index) {
-                this.$http.get(api + '/events/' + this.event.id + '/remove-guest/' + id).then(() => {
+                this.$http.get(api + 'events/' + this.event.id + '/remove-guest/' + id).then(() => {
                     this.event.memberList.splice(index, 1)
                     this.$toast.open({
                         message: 'Successfully removed guest from the list!',

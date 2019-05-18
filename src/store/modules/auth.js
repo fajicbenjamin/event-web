@@ -18,7 +18,7 @@ const mutations = {
 const actions = {
     login({commit}, user) {
         return new Promise((resolve, reject) => {
-            axios({url: api + '/login', data: user, method: 'POST' })
+            axios({url: api + 'login', data: user, method: 'POST' })
                 .then(response => {
                     const token = response.headers.authorization
                     commit('setLoggedIn', token)

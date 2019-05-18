@@ -123,7 +123,7 @@
                 }
 
                 if (this.create) {
-                    this.$http.post(api + '/locations', formData).then(response => {
+                    this.$http.post(api + 'locations', formData).then(response => {
                         console.log(response)
                         this.$toast.open({
                             message: 'Successfully created location!',
@@ -137,7 +137,7 @@
                         })
                     })
                 } else {
-                    this.$http.put(api + '/locations/' + this.location.id, formData).then(response => {
+                    this.$http.put(api + 'locations/' + this.location.id, formData).then(response => {
                         console.log(response)
                         this.$toast.open({
                             message: 'Successfully updated location!',
@@ -157,7 +157,7 @@
             let id = parseInt(this.$route.params.id)
             if (id) {
                 this.create = false
-                this.$http.get(api + '/locations/' + id).then(response => {
+                this.$http.get(api + 'locations/' + id).then(response => {
                     this.location = response.data
                     this.form.name = this.location.name
                     this.form.country = this.location.country

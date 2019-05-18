@@ -78,7 +78,7 @@
                 this.$router.push(`users/${id}`)
             },
             deleteUser(id, index) {
-                this.$http.delete(api + '/users/' + id).then(() => {
+                this.$http.delete(api + 'users/' + id).then(() => {
                     this.users.splice(index, 1)
                     this.$toast.open({
                         message: 'Successfully deleted user!',
@@ -101,7 +101,7 @@
             }
         },
         created() {
-            this.$http.get(api + '/users').then(response => {
+            this.$http.get(api + 'users').then(response => {
                 this.users = response.data
             })
         }

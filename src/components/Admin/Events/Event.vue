@@ -108,6 +108,11 @@
                         <v-flex xs12 sm2>
                             <v-switch v-model="form.registration" :label="$i18n.tc('registration')"></v-switch>
                         </v-flex>
+                        <v-flex xs12 sm2>
+                            <label>File
+                                <input type="file" id="file" ref="file" v-on:change="handleFileUpload()"/>
+                            </label>
+                        </v-flex>
                     </v-layout>
                 </v-container>
                 <v-card-actions>
@@ -162,7 +167,8 @@
             picker1: false,
             picker2: false,
             picker3: false,
-            picker4: false
+            picker4: false,
+            file: ''
         }),
         computed: {
             ...mapGetters({
@@ -183,13 +189,13 @@
         },
         methods: {
             submit () {
-                if (!this.isValidDate(this.form.startPickerDate)) {
-                    this.$toast.open({
-                        message: 'Your start date is not good!',
-                        type: 'is-danger'
-                    })
-                    return
-                }
+                // if (!this.isValidDate(this.form.startPickerDate)) {
+                //     this.$toast.open({
+                //         message: 'Your start date is not good!',
+                //         type: 'is-danger'
+                //     })
+                //     return
+                // }
                 if (!this.isValidTime(this.form.startPickerTime)) {
                     this.$toast.open({
                         message: 'Your start time is not good!',
@@ -200,47 +206,67 @@
 
                 let startTime = new Date(this.form.startPickerDate + ' ' + this.form.startPickerTime);
 
-                let formData = {
-                    name: this.form.name,
-                    description: this.form.description,
-                    startTime: startTime.toISOString(),
-                    endTime: startTime.toISOString(),
-                    availablePlaces: this.form.availablePlaces,
-                    repeating: this.form.repeating,
-                    registration: this.form.registration,
-                    category_id: this.categories.find(x => x.name === this.form.category).id,
-                    location_id: this.locations.find(x => x.name === this.form.location).id
-                }
+                let formData = new FormData()
 
-                this.$http.post(api + '/events', formData).then(response => {
-                    console.log(response)
-                    this.$toast.open({
-                        message: 'Successfully created event!',
-                        type: 'is-success'
+                formData.append('name', this.form.name)
+                formData.append('description', this.form.description)
+                formData.append('startTime', startTime.toISOString())
+                formData.append('endTime', startTime.toISOString())
+                formData.append('availablePlaces', this.form.availablePlaces)
+                formData.append('repeating', this.form.repeating)
+                formData.append('registration', this.form.registration)
+                formData.append('category_id', this.categories.find(x => x.name === this.form.category).id)
+                formData.append('location_id', this.locations.find(x => x.name === this.form.location).id)
+                formData.append('file', this.file)
+
+                if (this.create) {
+                    this.$http.post(api + 'events', formData).then(response => {
+                        console.log(response)
+                        this.$toast.open({
+                            message: 'Successfully created event!',
+                            type: 'is-success'
+                        })
+                    }).catch(error => {
+                        console.log(error)
+                        this.$toast.open({
+                            message: 'Error while creating event!',
+                            type: 'is-danger'
+                        })
                     })
-                }).catch(error => {
-                    console.log(error)
-                    this.$toast.open({
-                        message: 'Successfully created event!',
-                        type: 'is-danger'
+                } else {
+                    this.$http.put(api + 'events/' + this.currentEvent.id, formData).then(response => {
+                        console.log(response)
+                        this.$toast.open({
+                            message: 'Successfully updated event!',
+                            type: 'is-success'
+                        })
+                    }).catch(error => {
+                        console.log(error)
+                        this.$toast.open({
+                            message: 'Error while updating event!',
+                            type: 'is-danger'
+                        })
                     })
-                })
+                }
             },
             isValidDate(d) {
                 return d instanceof Date && !isNaN(d);
             },
             isValidTime(t) {
                 return /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(t);
+            },
+            handleFileUpload(){
+                this.file = this.$refs.file.files[0];
             }
         },
         created() {
-            this.$http.get(api + '/categories').then(response => {
+            this.$http.get(api + 'categories').then(response => {
                 this.categories = response.data.content
                 this.categories.forEach(category => {
                     this.categoryNames.push(category.name)
                 })
             })
-            this.$http.get(api + '/locations').then(response => {
+            this.$http.get(api + 'locations').then(response => {
                 this.locations = response.data.content
                 this.locations.forEach(location => {
                     this.locationNames.push(location.name)
@@ -250,7 +276,7 @@
             let id = parseInt(this.$route.params.id)
             if (id) {
                 this.create = false
-                this.$http.get(api + '/events/' + id).then(response => {
+                this.$http.get(api + 'events/' + id).then(response => {
                     this.currentEvent = response.data
                     this.form.name = this.currentEvent.name
                     this.form.description = this.currentEvent.description
@@ -276,5 +302,9 @@
         margin: 20px auto;
         padding-bottom: 20px;
         text-align: center;
+    }
+    section {
+        padding-bottom: 20px;
+        margin-bottom: 20px;
     }
 </style>

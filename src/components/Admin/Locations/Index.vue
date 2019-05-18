@@ -81,7 +81,7 @@
                 this.$router.push(`locations/${id}`)
             },
             deleteLocation(id, index) {
-                this.$http.delete(api + '/locations/' + id).then(() => {
+                this.$http.delete(api + 'locations/' + id).then(() => {
                     this.locations.splice(index, 1)
                     this.$toast.open({
                         message: 'Successfully deleted location!',
@@ -104,7 +104,7 @@
             }
         },
         created() {
-            this.$http.get(api + '/locations').then(response => {
+            this.$http.get(api + 'locations').then(response => {
                 this.locations = response.data.content
             })
         }

@@ -12,6 +12,7 @@ import Location from "../components/Admin/Locations/Location";
 import CategoriesIndex from "../components/Admin/Categories/Index";
 import EventPage from "../components/Pages/Event";
 import Login from "../components/Admin/Login";
+import Category from "../components/Admin/Categories/Category";
 
 Vue.use(Router)
 
@@ -85,6 +86,11 @@ export default new Router({
                     path: 'categories',
                     name: 'Categories',
                     component: CategoriesIndex
+                },
+                {
+                    path: 'categories/:id',
+                    name: 'Category',
+                    component: Category
                 }
             ]
         }

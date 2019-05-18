@@ -1,80 +1,101 @@
 <template>
-    <v-layout row>
-        <v-flex xs12 sm6 offset-sm3>
-            <v-card>
-                <v-toolbar color="cyan" dark>
-                    <v-toolbar-side-icon></v-toolbar-side-icon>
+    <section>
+        <v-card-actions>
+            <span class="center headline">{{ $tc('category', 2) }}</span>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" dark @click="$router.push('categories/create')">New {{ $tc('category') }}</v-btn>
+        </v-card-actions>
+        <b-table
+                :data="isEmpty ? [] : categories"
+                :bordered="isBordered"
+                :striped="isStriped"
+                :narrowed="isNarrowed"
+                :hoverable="isHoverable"
+                :loading="isLoading"
+                :focusable="isFocusable"
+                :mobile-cards="hasMobileCards">
 
-                    <v-toolbar-title>Inbox</v-toolbar-title>
+            <template slot-scope="props">
+                <b-table-column field="id" label="ID" width="40" numeric>
+                    {{ props.row.id }}
+                </b-table-column>
 
-                    <v-spacer></v-spacer>
+                <b-table-column field="name" :label="$i18n.tc('name')">
+                    {{ props.row.name }}
+                </b-table-column>
 
-                    <v-btn icon>
-                        <v-icon>search</v-icon>
+                <b-table-column :label="$i18n.tc('action', 2)">
+                    <v-btn icon small @click="editCategory(props.row.id)">
+                        <v-icon>edit</v-icon>
                     </v-btn>
-                </v-toolbar>
+                    <v-btn icon small @click="deleteCategory(props.row.id, props.index)">
+                        <v-icon>delete</v-icon>
+                    </v-btn>
+                </b-table-column>
+            </template>
 
-                <v-list two-line>
-                    <template v-for="(item, index) in items">
-                        <v-subheader
-                                v-if="item.header"
-                                :key="item.header"
-                        >
-                            {{ item.header }}
-                        </v-subheader>
-
-                        <v-divider
-                                v-else-if="item.divider"
-                                :key="index"
-                                :inset="item.inset"
-                        ></v-divider>
-
-                        <v-list-tile
-                                v-else
-                                :key="item.title"
-                                avatar
-                                @click="alert('hello')"
-                        >
-                            <v-list-tile-avatar>
-                                <img :src="item.avatar">
-                            </v-list-tile-avatar>
-
-                            <v-list-tile-content>
-                                <v-list-tile-title v-html="item.title"></v-list-tile-title>
-                                <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
-                            </v-list-tile-content>
-                        </v-list-tile>
-                    </template>
-                </v-list>
-            </v-card>
-        </v-flex>
-    </v-layout>
+            <template slot="empty">
+                <section class="section">
+                    <div class="content has-text-grey has-text-centered">
+                        <p>
+                            <b-icon
+                                    icon="emoticon-sad"
+                                    size="is-large">
+                            </b-icon>
+                        </p>
+                        <p>{{ $t('emptyTable') }}</p>
+                    </div>
+                </section>
+            </template>
+        </b-table>
+    </section>
 </template>
 
 <script>
+    import BTableColumn from "buefy/src/components/table/TableColumn";
+    import { mapGetters } from 'vuex'
+    import {api} from "../../../main";
+
     export default {
-        data: () => ({
-            items: [
-                { header: 'Today' },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
-                    title: 'Brunch this weekend?',
-                    subtitle: "<span class='text--primary'>Ali Connors</span> &mdash; I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-                },
-                { divider: true, inset: true },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
-                    title: 'Summer BBQ <span class="grey--text text--lighten-1">4</span>',
-                    subtitle: "<span class='text--primary'>to Alex, Scott, Jennifer</span> &mdash; Wish I could come, but I'm out of town this weekend."
-                },
-                { divider: true, inset: true },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
-                    title: 'Oui oui',
-                    subtitle: "<span class='text--primary'>Sandra Adams</span> &mdash; Do you have Paris recommendations? Have you ever been?"
-                }
-            ]
-        })
+        components: {BTableColumn},
+        computed: {
+            ...mapGetters({
+                isLoggedIn: 'isLoggedIn',
+                events: 'getEvents'
+            }),
+        },
+        methods: {
+            editCategory(id) {
+                this.$router.push(`categories/${id}`)
+            },
+            deleteCategory(id, index) {
+                this.$http.delete(api + 'categories/' + id).then(() => {
+                    this.categories.splice(index, 1)
+                    this.$toast.open({
+                        message: 'Successfully deleted category!',
+                        type: 'is-success'
+                    })
+                })
+            }
+        },
+        data() {
+            return {
+                categories: [],
+                isEmpty: false,
+                isBordered: true,
+                isStriped: true,
+                isNarrowed: false,
+                isHoverable: false,
+                isFocusable: false,
+                isLoading: false,
+                hasMobileCards: true
+            }
+        },
+        created() {
+            this.$http.get(api + 'categories').then(response => {
+                this.categories = response.data.content
+            })
+        }
     }
 </script>
 
