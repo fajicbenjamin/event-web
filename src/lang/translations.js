@@ -33,12 +33,16 @@ export default {
         prev: 'Prev',
         next: 'Next',
         seeEvent: 'See event',
+        upcoming: 'upcoming this month',
+        guest: 'Guest | Guests',
+        guestsRegistered: 'guests registered'
+
     },
     bs: {
         app: 'Organizator',
         footer: 'Benjamin &copy; 2019',
         overview: 'Detalji',
-        event: 'Događaji',
+        event: 'Događaj | Događaji',
         category: 'Kategorija | Kategorije',
         location: 'Lokacija | Lokacije',
         user: 'Korisnik | Korisnici',
@@ -68,5 +72,8 @@ export default {
         prev: 'Prošli',
         next: 'Sljedeći',
         seeEvent: 'Pogledaj događaj',
+        upcoming: 'slijedi u toku ovog mjeseca',
+        guest: 'Gost | Gosti',
+        guestsRegistered: 'gostiju registrovano',
     }
 }

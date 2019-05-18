@@ -1,5 +1,8 @@
 <template>
     <div>
+        <b-modal :active.sync="isComponentModalActive" has-modal-card>
+            <login-modal></login-modal>
+        </b-modal>
         <navbar></navbar>
         <section v-if="event">
             <v-flex xs12 sm6 offset-sm3 class="card-custom" hover>
@@ -31,7 +34,7 @@
                     </v-card-title>
 
                     <v-card-actions class="card-actions">
-                        <v-btn v-if="!event.registration">{{ $t('reserve') }}</v-btn>
+                        <v-btn v-if="!event.registration" @click="isComponentModalActive = true">{{ $t('reserve') }}</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-flex>
@@ -42,11 +45,13 @@
 <script>
     import {api} from "../../main";
     import Navbar from "../Navbar";
+    import LoginModal from "../LoginModal";
 
     export default {
-        components: {Navbar},
+        components: {LoginModal, Navbar},
         data: () => ({
             event: null,
+            isComponentModalActive: false,
             api
         }),
         computed: {
