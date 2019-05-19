@@ -15,7 +15,10 @@
 <script>
 
 export default {
-  name: 'app'
+  name: 'app',
+  created() {
+    this.$i18n.locale = localStorage.getItem('lang') ? localStorage.getItem('lang') : 'en'
+  }
 }
 </script>
 

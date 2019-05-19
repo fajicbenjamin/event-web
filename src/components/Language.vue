@@ -29,6 +29,7 @@
         methods: {
             changeLanguage(language) {
                 this.$i18n.locale = language
+                localStorage.setItem('lang', language)
             }
         }
     }
