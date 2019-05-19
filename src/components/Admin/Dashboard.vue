@@ -65,9 +65,22 @@
             </v-toolbar-title>
             <v-spacer></v-spacer>
             <language></language>
-            <v-btn icon large>
-                <v-icon>perm_identity</v-icon>
-            </v-btn>
+            <v-menu offset-y>
+                <template #activator="{ on }">
+                    <v-btn icon large v-on="on">
+                        <v-icon>perm_identity</v-icon>
+                    </v-btn>
+                </template>
+                <v-list>
+                    <v-list-tile
+                            v-for="(item, index) in options"
+                            :key="index"
+                            @click="logout"
+                    >
+                        <v-list-tile-title>Logout</v-list-tile-title>
+                    </v-list-tile>
+                </v-list>
+            </v-menu>
         </v-toolbar>
         <v-content class="custom-container">
             <dashboard-content class="mr-4 ml-4"></dashboard-content>
@@ -89,6 +102,7 @@
         data: () => ({
             dialog: false,
             drawer: null,
+            options: ['Logout']
         }),
         computed: {
             ...mapGetters({
@@ -112,6 +126,15 @@
             },
             getActiveItem(item) {
                 return this.$route.name === item.text ? 'background: rgba(0,0,0,0.15);' : ''
+            },
+            logout() {
+                localStorage.removeItem('token')
+                delete this.$http.defaults.headers.common['Authorization']
+                this.$toast.open({
+                    message: this.$i18n.tc('successfullyLoggedOut'),
+                    type: 'is-success'
+                })
+                this.$router.push('/login')
             }
         }
     }

@@ -2,17 +2,22 @@ import {api} from '../../main.js'
 import axios from 'axios'
 
 const state = {
-    token: localStorage.getItem('token')
+    token: localStorage.getItem('token'),
+    member: localStorage.getItem('member'),
 }
 
 const getters = {
-    isLoggedIn: state => !!state.token
+    isLoggedIn: state => !!state.token,
+    getMember: state => state.member,
 }
 
 const mutations = {
     setLoggedIn (state, elem) {
         state.token = elem
     },
+    setMember (state, elem) {
+        state.member = elem
+    }
 }
 
 const actions = {
@@ -30,13 +35,6 @@ const actions = {
                     localStorage.removeItem('token')
                     reject(err)
                 })
-        })
-    },
-    logout() {
-        return new Promise((resolve) => {
-            localStorage.removeItem('token')
-            delete this.$http.defaults.headers.common['Authorization']
-            resolve()
         })
     }
 }

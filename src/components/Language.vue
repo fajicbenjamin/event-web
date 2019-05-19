@@ -1,7 +1,7 @@
 <template>
     <v-menu offset-y>
         <template #activator="{ on }">
-            <v-btn icon v-on="on">
+            <v-btn icon large v-on="on">
                 <v-icon>language</v-icon>
             </v-btn>
         </template>
