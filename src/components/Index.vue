@@ -11,7 +11,7 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
+  import {api} from "../main";
   import EventCalendar from "./EventCalendar";
   import Navbar from "./Navbar";
 
@@ -23,18 +23,15 @@
     name: 'Index',
     data: () => ({
       isComponentModalActive: false,
-      // events: []
+      events: []
     }),
-    computed: {
-      ...mapGetters({
-        isLoggedIn: 'isLoggedIn',
-        events: 'getEvents'
-      }),
-    },
     methods: {
       // methods
     },
     created() {
+      this.$http.get(api + 'events').then(response => {
+        this.events = response.data
+      })
     }
   }
 </script>

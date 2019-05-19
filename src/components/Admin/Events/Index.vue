@@ -76,21 +76,14 @@
 
 <script>
     import BTableColumn from "buefy/src/components/table/TableColumn";
-    import { mapGetters } from 'vuex'
     import {api} from "../../../main";
 
     export default {
         components: {BTableColumn},
-        computed: {
-            ...mapGetters({
-                isLoggedIn: 'isLoggedIn',
-                events: 'getEvents'
-            }),
-        },
         methods: {
             editEvent(id) {
-                let event = this.events.find(x => x.id === id)
-                this.$store.commit('setCurrentEvent', event)
+                // let event = this.events.find(x => x.id === id)
+                // this.$store.commit('setCurrentEvent', event)
                 this.$router.push(`events/${id}`)
             },
             deleteEvent(id, index) {
@@ -105,6 +98,7 @@
         },
         data() {
             return {
+                events: [],
                 isEmpty: false,
                 isBordered: true,
                 isStriped: true,
@@ -114,6 +108,11 @@
                 isLoading: false,
                 hasMobileCards: true
             }
+        },
+        created() {
+            this.$http.get(api + 'events').then(response => {
+                this.events = response.data
+            })
         }
     }
 </script>

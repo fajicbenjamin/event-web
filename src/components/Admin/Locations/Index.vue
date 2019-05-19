@@ -65,17 +65,10 @@
 
 <script>
     import BTableColumn from "buefy/src/components/table/TableColumn";
-    import { mapGetters } from 'vuex'
     import {api} from "../../../main";
 
     export default {
         components: {BTableColumn},
-        computed: {
-            ...mapGetters({
-                isLoggedIn: 'isLoggedIn',
-                events: 'getEvents'
-            }),
-        },
         methods: {
             editLocation(id) {
                 this.$router.push(`locations/${id}`)

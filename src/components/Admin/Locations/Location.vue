@@ -76,7 +76,6 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
     import {api} from "../../../main";
 
     export default {
@@ -97,11 +96,6 @@
             create: true
         }),
         computed: {
-            ...mapGetters({
-                isLoggedIn: 'isLoggedIn',
-                events: 'getEvents',
-                currentEvent: 'getCurrentEvent'
-            }),
             formIsValid () {
                 return (
                     this.form.name &&

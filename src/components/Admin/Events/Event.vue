@@ -135,7 +135,6 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
     import {api} from "../../../main";
     import MembersTable from './MembersTable.vue'
 
@@ -171,11 +170,6 @@
             file: ''
         }),
         computed: {
-            ...mapGetters({
-                isLoggedIn: 'isLoggedIn',
-                events: 'getEvents',
-                // currentEvent: 'getCurrentEvent'
-            }),
             formIsValid () {
                 return (
                     this.form.name &&

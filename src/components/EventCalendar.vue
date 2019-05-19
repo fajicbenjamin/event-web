@@ -80,11 +80,12 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import {api} from "../main";
 
     export default {
         data: () => ({
             today: '',
+            events: [],
             calendarEvents: [],
             start: '',
             type: 'month',
@@ -98,11 +99,6 @@
             ]
         }),
         computed: {
-            ...mapGetters({
-                isLoggedIn: 'isLoggedIn',
-                events: 'getEvents',
-                promise: 'getPromise'
-            }),
             // convert the list of events into a map of lists keyed by date
             eventsMap () {
                 const map = {}
@@ -117,20 +113,19 @@
         },
         created() {
             this.today = new Date().toISOString().slice(0, 10)
-            if (this.promise) {
-                this.promise.then(() => {
-                    this.events.forEach((event) => {
-                        let startTime = new Date(event.startTime.toLocaleString())
-                        this.calendarEvents.push({
-                            id: event.id,
-                            date: startTime.toISOString().slice(0, 10),
-                            title: event.name,
-                            details: event.description,
-                            open: false
-                        })
+            this.$http.get(api + 'events').then(response => {
+                this.events = response.data
+                this.events.forEach((event) => {
+                    let startTime = new Date(event.startTime.toLocaleString())
+                    this.calendarEvents.push({
+                        id: event.id,
+                        date: startTime.toISOString().slice(0, 10),
+                        title: event.name,
+                        details: event.description,
+                        open: false
                     })
                 })
-            }
+            })
         }
     }
 </script>

@@ -90,7 +90,6 @@
 
 <script>
     import DashboardContent from './Content.vue'
-    import { mapGetters } from 'vuex'
     import Language from "../Language";
 
     export default {
@@ -105,11 +104,6 @@
             options: ['Logout']
         }),
         computed: {
-            ...mapGetters({
-                isLoggedIn: 'isLoggedIn',
-                events: 'getEvents',
-                activeTab: 'getActiveTab'
-            }),
             items() {
                 return [
                     { icon: 'dashboard', text: this.$i18n.t('overview'), value: 'overview'},
