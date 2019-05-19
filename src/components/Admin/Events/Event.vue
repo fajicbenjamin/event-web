@@ -343,9 +343,9 @@
                     let startTime = new Date(this.currentEvent.startTime)
                     let endTime = new Date(this.currentEvent.endTime)
 
-                    this.form.startPickerDate = startTime.toLocaleDateString()
+                    this.form.startPickerDate = startTime.toISOString().substr(0, 10)
                     this.form.startPickerTime = startTime.toLocaleTimeString()
-                    this.form.endPickerDate = endTime.toLocaleDateString()
+                    this.form.endPickerDate = endTime.toISOString().substr(0, 10)
                     this.form.endPickerTime = endTime.toLocaleTimeString()
                 }).catch(() => {
                     this.$router.push('/admin/events')
