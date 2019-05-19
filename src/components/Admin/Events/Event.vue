@@ -273,28 +273,24 @@
                 formData.append('file', this.file)
 
                 if (this.create) {
-                    this.$http.post(api + 'events', formData).then(response => {
-                        console.log(response)
+                    this.$http.post(api + 'events', formData).then(() => {
                         this.$toast.open({
                             message: 'Successfully created event!',
                             type: 'is-success'
                         })
-                    }).catch(error => {
-                        console.log(error)
+                    }).catch(() => {
                         this.$toast.open({
                             message: 'Error while creating event!',
                             type: 'is-danger'
                         })
                     })
                 } else {
-                    this.$http.put(api + 'events/' + this.currentEvent.id, formData).then(response => {
-                        console.log(response)
+                    this.$http.put(api + 'events/' + this.currentEvent.id, formData).then(() => {
                         this.$toast.open({
                             message: 'Successfully updated event!',
                             type: 'is-success'
                         })
-                    }).catch(error => {
-                        console.log(error)
+                    }).catch(() => {
                         this.$toast.open({
                             message: 'Error while updating event!',
                             type: 'is-danger'

@@ -34,8 +34,8 @@
                     </v-card-title>
 
                     <v-card-actions class="card-actions">
-                        <v-btn v-if="!event.registration && !reserved" @click="makeReservation">{{ $t('reserve') }}</v-btn>
-                        <v-btn v-if="!event.registration && member && reserved" disabled>{{ $t('reserved') }}</v-btn>
+                        <v-btn v-if="event.registration && !reserved" @click="makeReservation">{{ $t('reserve') }}</v-btn>
+                        <v-btn v-if="event.registration && member && reserved" disabled>{{ $t('reserved') }}</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-flex>
@@ -83,8 +83,7 @@
                     })
                     this.event.availablePlaces -= 1
                     this.members.push(Number(this.member.charAt(0)))
-                }).catch((error) => {
-                    console.log(error.response)
+                }).catch(() => {
                 })
             } else {
                 this.isComponentModalActive = true

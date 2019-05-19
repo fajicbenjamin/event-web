@@ -117,28 +117,24 @@
                 }
 
                 if (this.create) {
-                    this.$http.post(api + 'locations', formData).then(response => {
-                        console.log(response)
+                    this.$http.post(api + 'locations', formData).then(() => {
                         this.$toast.open({
                             message: 'Successfully created location!',
                             type: 'is-success'
                         })
-                    }).catch(error => {
-                        console.log(error)
+                    }).catch(() => {
                         this.$toast.open({
                             message: 'Error while creating location!',
                             type: 'is-danger'
                         })
                     })
                 } else {
-                    this.$http.put(api + 'locations/' + this.location.id, formData).then(response => {
-                        console.log(response)
+                    this.$http.put(api + 'locations/' + this.location.id, formData).then(() => {
                         this.$toast.open({
                             message: 'Successfully updated location!',
                             type: 'is-success'
                         })
-                    }).catch(error => {
-                        console.log(error)
+                    }).catch(() => {
                         this.$toast.open({
                             message: 'Error while updating location!',
                             type: 'is-danger'

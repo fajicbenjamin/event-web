@@ -85,14 +85,12 @@
                 }
 
                 if (this.create) {
-                    this.$http.post(api + 'users', formData).then(response => {
-                        console.log(response)
+                    this.$http.post(api + 'users', formData).then(() => {
                         this.$toast.open({
                             message: 'Successfully created user!',
                             type: 'is-success'
                         })
-                    }).catch(error => {
-                        console.log(error)
+                    }).catch(() => {
                         this.$toast.open({
                             message: 'Error while creating user!',
                             type: 'is-danger'
@@ -102,15 +100,12 @@
                     if (this.form.password !== '') {
                         formData.password = this.form.password
                     }
-                    console.log('da', formData)
-                    this.$http.put(api + 'users/' + this.user.id, formData).then(response => {
-                        console.log(response)
+                    this.$http.put(api + 'users/' + this.user.id, formData).then(() => {
                         this.$toast.open({
                             message: 'Successfully updated user!',
                             type: 'is-success'
                         })
-                    }).catch(error => {
-                        console.log(error)
+                    }).catch(() => {
                         this.$toast.open({
                             message: 'Error while updating user!',
                             type: 'is-danger'

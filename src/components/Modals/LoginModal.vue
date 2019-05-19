@@ -89,8 +89,7 @@
                         message: 'You are successfully registered',
                         type: 'is-success'
                     })
-                }).catch((error) => {
-                    console.log(error.response.data)
+                }).catch(() => {
                 })
             }
         },

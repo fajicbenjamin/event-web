@@ -57,14 +57,12 @@
                 }
 
                 if (this.create) {
-                    this.$http.post(api + 'categories', formData).then(response => {
-                        console.log(response)
+                    this.$http.post(api + 'categories', formData).then(() => {
                         this.$toast.open({
                             message: 'Successfully created category!',
                             type: 'is-success'
                         })
-                    }).catch(error => {
-                        console.log(error)
+                    }).catch(() => {
                         this.$toast.open({
                             message: 'Error while creating category!',
                             type: 'is-danger'
@@ -74,15 +72,12 @@
                     if (this.form.password !== '') {
                         formData.password = this.form.password
                     }
-                    console.log('da', formData)
-                    this.$http.put(api + 'categories/' + this.category.id, formData).then(response => {
-                        console.log(response)
+                    this.$http.put(api + 'categories/' + this.category.id, formData).then(() => {
                         this.$toast.open({
                             message: 'Successfully updated category!',
                             type: 'is-success'
                         })
-                    }).catch(error => {
-                        console.log(error)
+                    }).catch(() => {
                         this.$toast.open({
                             message: 'Error while updating category!',
                             type: 'is-danger'
