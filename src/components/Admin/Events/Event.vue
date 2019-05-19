@@ -6,13 +6,18 @@
             <v-form ref="form" @submit.prevent="submit">
                 <v-container grid-list-xl fluid>
                     <v-layout wrap>
-                        <v-flex xs12 sm6>
+                        <v-flex xs12 sm8>
                             <v-text-field
                                     v-model="form.name"
                                     :rules="rules.name"
                                     :label="$i18n.tc('name')"
                                     required
                             ></v-text-field>
+                        </v-flex>
+                        <v-flex xs12 sm2>
+                            <label>File
+                                <input type="file" id="file" ref="file" v-on:change="handleFileUpload()"/>
+                            </label>
                         </v-flex>
                         <v-flex xs12 sm6 md3>
                             <v-menu
@@ -68,6 +73,60 @@
                                 ></v-time-picker>
                             </v-menu>
                         </v-flex>
+                        <v-flex xs12 sm6 md3>
+                            <v-menu
+                                    v-model="picker3"
+                                    :close-on-content-click="false"
+                                    :nudge-right="40"
+                                    lazy
+                                    transition="scale-transition"
+                                    offset-y
+                                    full-width
+                                    min-width="290px"
+                            >
+                                <template #activator="{ on }">
+                                    <v-text-field
+                                            v-model="form.endPickerDate"
+                                            :label="$i18n.tc('endDate')"
+                                            prepend-icon="event"
+                                            v-on="on"
+                                    ></v-text-field>
+                                </template>
+                                <v-date-picker v-model="form.endPickerDate" @input="picker3 = false" locale="sk"></v-date-picker>
+                            </v-menu>
+                        </v-flex>
+                        <v-flex xs12 sm6 md3>
+                            <v-menu
+                                    ref="menu2"
+                                    v-model="picker4"
+                                    :close-on-content-click="false"
+                                    :nudge-right="40"
+                                    :return-value.sync="form.endPickerTime"
+                                    lazy
+                                    transition="scale-transition"
+                                    offset-y
+                                    full-width
+                                    max-width="290px"
+                                    min-width="290px"
+                            >
+                                <template #activator="{ on }">
+                                    <v-text-field
+                                            v-model="form.endPickerTime"
+                                            :label="$i18n.tc('endTime')"
+                                            prepend-icon="access_time"
+                                            required
+                                            v-on="on"
+                                    ></v-text-field>
+                                </template>
+                                <v-time-picker
+                                        v-if="picker4"
+                                        v-model="form.endPickerTime"
+                                        full-width
+                                        format="24hr"
+                                        @click:minute="$refs.menu2.save(form.endPickerTime)"
+                                ></v-time-picker>
+                            </v-menu>
+                        </v-flex>
                         <v-flex xs12>
                             <v-textarea
                                     v-model="form.description"
@@ -97,7 +156,7 @@
                         </v-flex>
                         <v-flex xs12 sm4>
                             <v-text-field
-                                    mask="######"
+                                    type="number"
                                     :label="$i18n.tc('availablePlaces')"
                                     v-model="form.availablePlaces"
                             ></v-text-field>
@@ -107,11 +166,6 @@
                         </v-flex>
                         <v-flex xs12 sm2>
                             <v-switch v-model="form.registration" :label="$i18n.tc('registration')"></v-switch>
-                        </v-flex>
-                        <v-flex xs12 sm2>
-                            <label>File
-                                <input type="file" id="file" ref="file" v-on:change="handleFileUpload()"/>
-                            </label>
                         </v-flex>
                     </v-layout>
                 </v-container>
@@ -148,8 +202,10 @@
             form: {
                 name: '',
                 description: '',
-                startPickerDate: new Date().toISOString().substr(0, 10),
+                startPickerDate: null,
                 startPickerTime: null,
+                endPickerDate: null,
+                endPickerTime: null,
                 category: '',
                 location: '',
                 availablePlaces: 0,
@@ -177,35 +233,38 @@
                     this.form.category &&
                     this.form.location &&
                     this.form.startPickerTime &&
-                    this.form.startPickerDate
+                    this.form.startPickerDate &&
+                    this.form.endPickerTime &&
+                    this.form.endPickerDate
                 )
             }
         },
         methods: {
             submit () {
-                // if (!this.isValidDate(this.form.startPickerDate)) {
-                //     this.$toast.open({
-                //         message: 'Your start date is not good!',
-                //         type: 'is-danger'
-                //     })
-                //     return
-                // }
-                if (!this.isValidTime(this.form.startPickerTime)) {
+                if (!this.isValidDate(this.form.startPickerDate) || !this.isValidDate(this.form.endPickerDate)) {
                     this.$toast.open({
-                        message: 'Your start time is not good!',
+                        message: 'Your date pick is not good!',
+                        type: 'is-danger'
+                    })
+                    return
+                }
+                if (!this.isValidTime(this.form.startPickerTime) || !this.isValidTime(this.form.endPickerTime)) {
+                    this.$toast.open({
+                        message: 'Your time pick is not good!',
                         type: 'is-danger'
                     })
                     return
                 }
 
                 let startTime = new Date(this.form.startPickerDate + ' ' + this.form.startPickerTime);
+                let endTime = new Date(this.form.endPickerDate + ' ' + this.form.endPickerTime)
 
                 let formData = new FormData()
 
                 formData.append('name', this.form.name)
                 formData.append('description', this.form.description)
                 formData.append('startTime', startTime.toISOString())
-                formData.append('endTime', startTime.toISOString())
+                formData.append('endTime', endTime.toISOString())
                 formData.append('availablePlaces', this.form.availablePlaces)
                 formData.append('repeating', this.form.repeating)
                 formData.append('registration', this.form.registration)
@@ -244,7 +303,8 @@
                 }
             },
             isValidDate(d) {
-                return d instanceof Date && !isNaN(d);
+                let date = new Date(d)
+                return date instanceof Date && !isNaN(date);
             },
             isValidTime(t) {
                 return /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(t);
@@ -279,8 +339,14 @@
                     this.form.repeating = this.currentEvent.repeating
                     this.form.category = this.categoryNames.find(x => x === this.currentEvent.category.name)
                     this.form.location = this.locationNames.find(x => x === this.currentEvent.location.name)
-                    this.form.startPickerDate = this.currentEvent.startTime.substr(0, 10) // take date from timestamp
-                    this.form.startPickerTime = this.currentEvent.startTime.substr(11, 5) // take time from timestamp
+
+                    let startTime = new Date(this.currentEvent.startTime)
+                    let endTime = new Date(this.currentEvent.endTime)
+
+                    this.form.startPickerDate = startTime.toLocaleDateString()
+                    this.form.startPickerTime = startTime.toLocaleTimeString()
+                    this.form.endPickerDate = endTime.toLocaleDateString()
+                    this.form.endPickerTime = endTime.toLocaleTimeString()
                 }).catch(() => {
                     this.$router.push('/admin/events')
                 })
