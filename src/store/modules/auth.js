@@ -21,7 +21,8 @@ const mutations = {
 }
 
 const actions = {
-    login({commit}, user) {
+    login({commit}, user)
+    {
         return new Promise((resolve, reject) => {
             axios({url: api + 'login', data: user, method: 'POST' })
                 .then(response => {
